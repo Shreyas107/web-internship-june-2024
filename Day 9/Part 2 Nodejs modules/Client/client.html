@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap.min.css" />
+    <script src="jquery-1.9.1.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+  </head>
+  <body>
+    <center>
+      <button class="btn btn-primary" onclick="GetData()">
+        Click Me To Get Data From Node Server
+      </button>
+      <hr />
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Name</th>
+              <th>Address</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </center>
+    <script>
+      function GetData() {
+        // var helper = new XMLHttpRequest();
+        // helper.onreadystatechange = () => {
+        //   if (helper.readyState == 4 && helper.status == 200) {
+        //     var data = JSON.parse(helper.responseText);
+        //     var refToTableBody = document.getElementById("tableBody");
+        //     for (i = 0; i < data.length; i++) {
+        //       var user = data[i];
+        //       var row = `<tr>
+        //                     <td>${user.id}</td>
+        //                     <td>${user.name}</td>
+        //                     <td>${user.email}</td>
+        //                 </tr>`;
+        //       refToTableBody.innerHTML = refToTableBody.innerHTML + row;
+        //       //console.log(user.No + user.Name + user.Address);
+        //     }
+        //   }
+        // };
+        // helper.open("GET", "http://127.0.0.1:5000/users");
+        // helper.send();
+
+        fetch("http://127.0.0.1:5000/users")
+          .then((res) => {
+            return res.json();
+          })
+          .then((users) => {
+            users.map((user) => {
+              var refToTableBody = document.getElementById("tableBody");
+              var row = `<tr>
+                            <td>${user.id}</td>
+                            <td>${user.name}</td>
+                            <td>${user.email}</td>
+                        </tr>`;
+              refToTableBody.innerHTML = refToTableBody.innerHTML + row;
+            });
+          });
+      }
+    </script>
+  </body>
+</html>
