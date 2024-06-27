@@ -22,8 +22,14 @@
   <body>
     <div id="navbar-container"></div>
     <div class="container mt-4">
-      <h1>Staff Home</h1>
-      <p>Welcome to the staff home page.</p>
+      <div id="content" style="display: none">
+        <h1>Staff Home</h1>
+        <p>Welcome to the staff home page.</p>
+      </div>
+      <div id="unauthorized" style="display: none">
+        <h1>Unauthorized Access</h1>
+        <p>You do not have permission to access this page.</p>
+      </div>
     </div>
     <script>
       $(document).ready(function () {
@@ -32,23 +38,20 @@
           const decodedToken = jwt_decode(token);
           const role = decodedToken.role;
 
-          let navbarFile = "";
-          if (role === "student") {
-            navbarFile = "../navbars/student-navbar.html";
-          } else if (role === "staff") {
-            navbarFile = "../navbars/staff-navbar.html";
-          } else if (role === "coordinator") {
-            navbarFile = "../navbars/coordinator-navbar.html";
-          } else if (role === "admin") {
-            navbarFile = "../navbars/admin-navbar.html";
+          if (role === "staff") {
+            $("#navbar-container").load(
+              "../navbars/staff-navbar.html",
+              function () {
+                $("#logoutBtn").click(function () {
+                  localStorage.removeItem("token");
+                  window.location.href = "../staff-login.html";
+                });
+              }
+            );
+            $("#content").show();
+          } else {
+            $("#unauthorized").show();
           }
-
-          $("#navbar-container").load(navbarFile, function () {
-            $("#logoutBtn").click(function () {
-              localStorage.removeItem("token");
-              window.location.href = "../staff-login.html";
-            });
-          });
         } else {
           window.location.href = "../staff-login.html";
         }
